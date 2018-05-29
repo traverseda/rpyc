@@ -121,14 +121,6 @@ class Browser(elm.StandardWindow):
             self.box_main.pack_start(self.box_content)
             print(e)
 
-
-    def bg_server(self, source = None, cond = None):
-        if self.conn:
-            self.conn.poll_all()
-            return True
-        else:
-            return False
-
 if __name__ == "__main__":
     b = Browser()
     loop = asyncio.get_event_loop()
