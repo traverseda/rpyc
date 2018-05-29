@@ -6,8 +6,7 @@ Window() et al.
 from efl import elementary as elm
 
 safe_elm_classes = set([
-    "Box", "Box", "Frame", "Entry", "Button", "ScrolledWindow",
-    "TextView", "Label",
+    "Box","Frame", "Entry","Label"
 ])
 
 class SafeElm():

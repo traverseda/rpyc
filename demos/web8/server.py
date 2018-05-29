@@ -1,12 +1,12 @@
 import rpyc
-from rpyc.utils.server import ThreadedServer
+from rpyc.utils.server import OneShotServer as Server
 import time
 import threading
 
 
 class Web8Service(rpyc.Service):
-    def exposed_get_page(self, gtk, content, page):
-        self.gtk = gtk
+    def exposed_get_page(self, elementry, content, page):
+        self.elm = elementry #The exposed subset of the elementry toolkit
         self.content = content
         page = page.replace(" ", "_").lower()
         pagefunc = getattr(self, "page_%s" % (page,), None)
@@ -20,7 +20,7 @@ class Web8Service(rpyc.Service):
     def page_main(self):
         counter = [0]
 
-        lbl1 = self.gtk.Label("Hello mate, this is the main page")
+        lbl1 = self.elm.Label("Hello mate, this is the main page")
         lbl1.show()
         self.content.pack_start(lbl1)
 
@@ -75,14 +75,12 @@ class Web8Service(rpyc.Service):
         self.content.pack_start(lbl3)
 
     def page_hello_world(self):
-        lbl = self.gtk.Label("Hello world!")
+        lbl = self.elm.Label(self.content, "Hello world!")
+        help(lbl)
         lbl.show()
         self.content.pack_start(lbl)
 
-
-
-
 if __name__ == "__main__":
-    t = ThreadedServer(Web8Service, port = 18833)
+    t = Server(Web8Service, port = 18833)
     t.start()
 

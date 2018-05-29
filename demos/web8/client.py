@@ -116,6 +116,7 @@ class Browser(elm.StandardWindow):
                 )
             self.box_content.show()
             self.box_main.pack_start(self.box_content)
+            print(e)
 
 
     def bg_server(self, source = None, cond = None):
