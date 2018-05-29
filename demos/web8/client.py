@@ -1,8 +1,10 @@
 import rpyc
 from efl import elementary
 from efl import elementary as elm
+from efl.ecore import Timer
 from efl.evas import EVAS_HINT_EXPAND, EVAS_HINT_FILL, EXPAND_BOTH, EXPAND_HORIZ, FILL_HORIZ, FILL_BOTH
 from safeElm import SafeElm
+import asyncio
 
 def BrowserServiceFactory(browser):
     class BrowserService(rpyc.Service):
@@ -105,9 +107,10 @@ class Browser(elm.StandardWindow):
         self.box_content.show()
         self.box_main.pack_start(self.box_content)
 
-        self.conn = rpyc.connect(host, port, service = BrowserServiceFactory(self))
-#        gobject.io_add_watch(self.conn, gobject.IO_IN, self.bg_server)
         try:
+            self.conn = rpyc.connect(host, port, service = BrowserServiceFactory(self))
+            self.conn._config["allow_public_attrs"] = True
+#            self.timer = Timer(0.5,self.conn.poll_all)
             self.conn.root.get_page(SafeElm, self.box_content, page)
         except Exception as e:
             self.box_content = elm.Entry(self.box_main,
@@ -126,7 +129,7 @@ class Browser(elm.StandardWindow):
         else:
             return False
 
-
 if __name__ == "__main__":
     b = Browser()
+    loop = asyncio.get_event_loop()
     elementary.run()

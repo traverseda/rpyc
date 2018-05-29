@@ -2,7 +2,7 @@ import rpyc
 from rpyc.utils.server import OneShotServer as Server
 import time
 import threading
-
+from efl.evas import EVAS_HINT_EXPAND, EVAS_HINT_FILL, EXPAND_BOTH, EXPAND_HORIZ, FILL_HORIZ, FILL_BOTH
 
 class Web8Service(rpyc.Service):
     def exposed_get_page(self, elementry, content, page):
@@ -75,8 +75,10 @@ class Web8Service(rpyc.Service):
         self.content.pack_start(lbl3)
 
     def page_hello_world(self):
-        lbl = self.elm.Label(self.content, "Hello world!")
-        help(lbl)
+        lbl = self.elm.Entry(self.content,
+                    text="Hello World", size_hint_weight=EXPAND_BOTH, size_hint_align=FILL_BOTH,
+              )
+
         lbl.show()
         self.content.pack_start(lbl)
 
