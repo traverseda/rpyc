@@ -5,7 +5,7 @@ Window() et al.
 """
 from efl import elementary as elm
 
-safe_elm_classes = set(("Box","Frame","Entry","Label"))
+safe_elm_classes = set(("Box","Frame","Entry","Label","Button"))
 
 class SafeElm():
     for _name in dir(elm):

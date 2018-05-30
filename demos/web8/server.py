@@ -1,5 +1,6 @@
 import rpyc
 from rpyc.utils.server import OneShotServer as Server
+#from rpyc.utils.server import ThreadedServer as Server
 import time
 import threading
 from efl.evas import EVAS_HINT_EXPAND, EVAS_HINT_FILL, EXPAND_BOTH, EXPAND_HORIZ, FILL_HORIZ, FILL_BOTH
@@ -13,14 +14,17 @@ class Web8Service(rpyc.Service):
         if pagefunc:
             pagefunc()
         else:
-            lbl1 = self.gtk.Label("Page %r does not exist" % (page,))
+            lbl1 = self.elm.Label(self.content,
+                                text="Page '{}' does not exist".format(page), size_hint_weight=EXPAND_BOTH, size_hint_align=FILL_BOTH,
+                          )
             lbl1.show()
             self.content.pack_start(lbl1)
 
     def page_main(self):
         counter = [0]
-
-        lbl1 = self.elm.Label("Hello mate, this is the main page")
+        lbl1 = self.elm.Label(self.content,
+                            text="Hello mate, this is the main page", size_hint_weight=EXPAND_BOTH, size_hint_align=FILL_BOTH,
+                      )
         lbl1.show()
         self.content.pack_start(lbl1)
 
@@ -28,7 +32,7 @@ class Web8Service(rpyc.Service):
             counter[0] += 1
             lbl2.set_text("You have clicked the button %d times" % (counter[0],))
 
-        btn1 = self.gtk.Button("Add 1")
+        btn1 = self.elm.Button("Add 1")
         btn1.connect("clicked", on_btn1_clicked)
         btn1.show()
         self.content.pack_start(btn1)
@@ -75,7 +79,7 @@ class Web8Service(rpyc.Service):
         self.content.pack_start(lbl3)
 
     def page_hello_world(self):
-        lbl = self.elm.Entry(self.content,
+        lbl = self.elm.Label(self.content,
                     text="Hello World", size_hint_weight=EXPAND_BOTH, size_hint_align=FILL_BOTH,
               )
 
